@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,7 @@ namespace ArbetsprovWebApp.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private string stringname;
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
@@ -24,8 +26,9 @@ namespace ArbetsprovWebApp.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
-        {
+        public async Task<IEnumerable<WeatherForecast>> GetAsync()
+        {            
+            string blobData = await CallBlobAPI("https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan/humidity/2019-01-10.csv"); //Rätt att kalla på metoden härifrån?
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
@@ -34,6 +37,23 @@ namespace ArbetsprovWebApp.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+        
+        //Ska nedan kod ligga i kontollern?
+        // HttpClient is intended to be instantiated once per application, rather than per-use. See Remarks.
+        static readonly HttpClient client = new HttpClient();
+
+        static async Task<string> CallBlobAPI(string BlobURI)
+        {            
+            try
+            {
+                string responseBody = await client.GetStringAsync(BlobURI);
+                return responseBody;
+            }
+            catch (HttpRequestException e)
+            {
+                return e.ToString();
+            }
         }
     }
 }
