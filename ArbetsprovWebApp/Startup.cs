@@ -25,6 +25,7 @@ namespace ArbetsprovWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMvc(option => option.EnableEndpointRouting = false); //Enpoint routing disabled
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +43,11 @@ namespace ArbetsprovWebApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
