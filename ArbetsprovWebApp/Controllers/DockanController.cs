@@ -8,9 +8,14 @@ using System.Threading.Tasks;
 namespace ArbetsprovWebApp.Controllers
 {
     public class DockanController : Controller
-    {        public async Task<string> DataAsync()
+    {        public async Task<string> DataAsync(string id)
         {
-            string blobData = await CallBlobAPI("https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan/humidity/2019-01-10.csv");
+            string blobDataHumidity = await CallBlobAPI("https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan/humidity/" + id + ".csv");
+            string blobDataTemperature = await CallBlobAPI("https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan/temperature/" + id + ".csv");
+            string blobDataRainfall = await CallBlobAPI("https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan/rainfall/" + id + ".csv");
+
+            string blobData = "Humidity \r\n" + blobDataHumidity + "Rainfall \r\n" + blobDataRainfall + "Temperature \r\n" + blobDataTemperature;
+
             return blobData;
         }
 
@@ -27,7 +32,5 @@ namespace ArbetsprovWebApp.Controllers
                 return e.ToString();
             }
         }
-    }
-
-    
+    }    
 }
