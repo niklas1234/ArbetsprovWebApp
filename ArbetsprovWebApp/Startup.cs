@@ -47,7 +47,7 @@ namespace ArbetsprovWebApp
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute("default", "api/v1/devices/{controller}/{action}/{id?}/{sensortype?}");
             });
         }
     }

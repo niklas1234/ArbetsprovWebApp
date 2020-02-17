@@ -8,18 +8,34 @@ using System.Threading.Tasks;
 namespace ArbetsprovWebApp.Controllers
 {
     public class DockanController : Controller
-    {        public async Task<string> DataAsync(string id)
+    {
+        static readonly HttpClient client = new HttpClient();
+        private string blobDataTemperature1;
+        private string blobDataHumidity1;
+        private string blobDataRainfall1;
+
+        [HttpGet]
+        public async Task<string> DataAsync(string id, string sensorType)
         {
-            string blobDataHumidity = await CallBlobAPI("https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan/humidity/" + id + ".csv");
-            string blobDataTemperature = await CallBlobAPI("https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan/temperature/" + id + ".csv");
-            string blobDataRainfall = await CallBlobAPI("https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan/rainfall/" + id + ".csv");
+            switch (sensorType)
+            {
+                case null: //No sensortype
+                    string blobDataHumidity = await CallBlobAPI("https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan/humidity/" + id + ".csv");
+                    string blobDataTemperature = await CallBlobAPI("https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan/temperature/" + id + ".csv");
+                    string blobDataRainfall = await CallBlobAPI("https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan/rainfall/" + id + ".csv");
+                    return "Humidity \r\n" + blobDataHumidity + "Rainfall \r\n" + blobDataRainfall + "Temperature \r\n" + blobDataTemperature;                    
 
-            string blobData = "Humidity \r\n" + blobDataHumidity + "Rainfall \r\n" + blobDataRainfall + "Temperature \r\n" + blobDataTemperature;
-
-            return blobData;
+                case "temperature":
+                    return blobDataTemperature1 = await CallBlobAPI("https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan/temperature/" + id + ".csv");
+                case "humidity":
+                    return blobDataHumidity1 = await CallBlobAPI("https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan/humidity/" + id + ".csv");
+                case "rainfall":
+                    return blobDataRainfall1 = await CallBlobAPI("https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan/rainfall/" + id + ".csv");
+                default:
+                    return "Sensortype not found.";
+            }            
         }
 
-        static readonly HttpClient client = new HttpClient();
         static async Task<string> CallBlobAPI(string BlobURI)
         {
             try
