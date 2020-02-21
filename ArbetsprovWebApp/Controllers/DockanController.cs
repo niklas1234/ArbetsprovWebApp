@@ -6,16 +6,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text.Json;
 using Newtonsoft.Json;
-using static ArbetsprovWebApp.Models.TemperatureClass;
+
 
 namespace ArbetsprovWebApp.Controllers
 {
     public class DockanController : Controller
     {        
-        private string blobDataTemperature1;
-        private string blobDataHumidity1;
-        private string blobDataRainfall1;
-        private string jsongString;
         private const string blobURI = "https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan";
 
         [HttpGet]
@@ -24,10 +20,14 @@ namespace ArbetsprovWebApp.Controllers
             switch (sensorType)
             {
                 case null: //No sensortype -> return all of them
-                    var blobDataTemperature = await FetchDataService.CallBlobAPI(blobURI + "/temperature/" + id + ".csv");
-                    var blobDataHumidity = await FetchDataService.CallBlobAPI(blobURI + "/humidity/" + id + ".csv");
-                    var blobDataRainfall = await FetchDataService.CallBlobAPI(blobURI + "/rainfall/" + id + ".csv");              
-                return "Humidity \r\n" + blobDataHumidity + "Rainfall \r\n" + blobDataRainfall + "Temperature \r\n" + blobDataTemperature;
+                    return await TemperatureClass.TempResponse(id);               
+                    //return await HumidityClass.HumidityResponse(id);                
+                    //return await RainfallClass.RainfallResponse(id);
+                //return await HumTempRainClass.HumTempRainResponse(id);
+                //var blobDataTemperature = await FetchDataService.CallBlobAPI(blobURI + "/temperature/" + id + ".csv");
+                //var blobDataHumidity = await FetchDataService.CallBlobAPI(blobURI + "/humidity/" + id + ".csv");
+                //var blobDataRainfall = await FetchDataService.CallBlobAPI(blobURI + "/rainfall/" + id + ".csv");              
+                //return "Humidity \r\n" + blobDataHumidity + "Rainfall \r\n" + blobDataRainfall + "Temperature \r\n" + blobDataTemperature;
                 case "temperature":
                     return await TemperatureClass.TempResponse(id);              
                 case "humidity":
