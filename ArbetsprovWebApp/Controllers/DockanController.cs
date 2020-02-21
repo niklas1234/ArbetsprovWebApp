@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text.Json;
 using Newtonsoft.Json;
+using static ArbetsprovWebApp.Models.TemperatureClass;
 
 namespace ArbetsprovWebApp.Controllers
 {
@@ -23,48 +24,16 @@ namespace ArbetsprovWebApp.Controllers
             switch (sensorType)
             {
                 case null: //No sensortype -> return all of them
-                    var blobDataHumidity = await FetchDataService.CallBlobAPI(blobURI + "/humidity/" + id + ".csv");
                     var blobDataTemperature = await FetchDataService.CallBlobAPI(blobURI + "/temperature/" + id + ".csv");
-                    var blobDataRainfall = await FetchDataService.CallBlobAPI(blobURI + "/rainfall/" + id + ".csv");
-
-                    var outgoingObjAsList = new List<Temperature>();
-                    var jsonList = new List<Temperature>();
-                    var x = new List<Temperature>();
-                    var listofTemperatures = blobDataTemperature.Split("\r\n").ToList();
-                    var json = System.Text.Json.JsonSerializer.Serialize(listofTemperatures);  //Skapa lista i foreach och kör sen denna raden
-                    foreach (var temperature in listofTemperatures)
-                    {
-                        if (!string.IsNullOrEmpty(temperature)) 
-                        { 
-                        var temperatureData = temperature.Split(";");
-                        //var pointinTime = temperatureData[0];
-                        //var temper = temperatureData[1];
-                        Temperature outgoingJson = new Temperature()
-                        {
-                            PointInTime = temperatureData[0],
-                            TemperatureCelsius = temperatureData[1]
-                        };
-                        //var temperatureObj = new Temperature();
-                        //temperatureObj.PointInTime = pointinTime;
-                        //temperatureObj.TemperatureCelsius = temper;
-                        //var json = JsonConvert.SerializeObject(temperatureObj);
-                        //var json = JsonSerializer.Serialize(aList);                        
-
-                        outgoingObjAsList.Add(outgoingJson);
-                        }
-                    }
-                    return System.Text.Json.JsonSerializer.Serialize(outgoingObjAsList);
-                //var JSONresult = JsonConvert.SerializeObject(outgoingObjAsList.OrderBy(kaffe => kaffe.StartDate).ThenBy(kaffe => kaffe.LastModifiedDateTime));
-                //var JSONresult = JsonConvert.SerializeObject(outgoingObjAsList);
-
-                // return JSONresult;
-                //return "Humidity \r\n" + blobDataHumidity + "Rainfall \r\n" + blobDataRainfall + "Temperature \r\n" + blobDataTemperature;
-                case "temperature":                    
-                    return blobDataTemperature1 = await FetchDataService.CallBlobAPI(blobURI + "/temperature/" + id + ".csv");
+                    var blobDataHumidity = await FetchDataService.CallBlobAPI(blobURI + "/humidity/" + id + ".csv");
+                    var blobDataRainfall = await FetchDataService.CallBlobAPI(blobURI + "/rainfall/" + id + ".csv");              
+                return "Humidity \r\n" + blobDataHumidity + "Rainfall \r\n" + blobDataRainfall + "Temperature \r\n" + blobDataTemperature;
+                case "temperature":
+                    return await TemperatureClass.TempResponse(id);              
                 case "humidity":
-                    return blobDataHumidity1 = await FetchDataService.CallBlobAPI(blobURI + "/humidity/" + id + ".csv");
+                    return await HumidityClass.HumidityResponse(id);                    
                 case "rainfall":
-                    return blobDataRainfall1 = await FetchDataService.CallBlobAPI(blobURI + "/rainfall/" + id + ".csv");
+                    return await RainfallClass.RainfallResponse(id);
                 default:
                     return "Sensortype not found.";
             }            
