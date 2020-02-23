@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace ArbetsprovWebApp.Models
 {
-    public class RainfallClass
+    public static class RainfallClass
     {
         private const string blobURI = "https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan";
-        public class RainfallObj
+        private class RainfallObj
         {
             public string PointInTime { get; set; }
             public string Rainfall { get; set; }

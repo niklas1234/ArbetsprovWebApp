@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace ArbetsprovWebApp.Models
 {
-    public class HumidityClass
+    public static class HumidityClass
     {
         private const string blobURI = "https://sigmaiotexercisetest.blob.core.windows.net/iotbackend/dockan";
-        public class HumidityObj
+        private class HumidityObj
         {
             public string PointInTime { get; set; }
             public string Humidity { get; set; }

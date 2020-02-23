@@ -2,13 +2,15 @@
 
 namespace ArbetsprovWebApp.Models
 {
-    public class HumTempRainClass
+    public static class HumTempRainClass
     {       
         public static async Task<string> HumTempRainResponse(string dateParam)
-        {  
-            return await HumidityClass.HumidityResponse(dateParam) + 
-                TemperatureClass.TemperatureResponse(dateParam) + 
-                RainfallClass.RainfallResponse(dateParam);
+        {
+            var humidityResp = await HumidityClass.HumidityResponse(dateParam);
+            var temperatureResp = await TemperatureClass.TemperatureResponse(dateParam);
+            var rainfallResp = await RainfallClass.RainfallResponse(dateParam);
+
+            return humidityResp + temperatureResp + rainfallResp;
         }        
     }
 }
