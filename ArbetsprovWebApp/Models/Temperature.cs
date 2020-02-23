@@ -25,11 +25,11 @@ namespace ArbetsprovWebApp.Models
             {
                 if (!string.IsNullOrEmpty(temperature))
                 {
-                    var temperatureData = temperature.Split(";");
+                    var temperatureLine = temperature.Split(";");
                     TemperatureObj outgoingJson = new TemperatureObj()
                     {
-                        PointInTime = temperatureData[0],
-                        Temperature = temperatureData[1]
+                        PointInTime = temperatureLine[0],
+                        Temperature = temperatureLine[1]
                     };
                     outgoingObjAsList.Add(outgoingJson);
                 }

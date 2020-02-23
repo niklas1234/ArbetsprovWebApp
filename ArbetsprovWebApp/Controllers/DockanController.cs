@@ -1,12 +1,6 @@
 ﻿using ArbetsprovWebApp.Models;
-using ArbetsprovWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Text.Json;
-using Newtonsoft.Json;
-
 
 namespace ArbetsprovWebApp.Controllers
 {
@@ -20,14 +14,7 @@ namespace ArbetsprovWebApp.Controllers
             switch (sensorType)
             {
                 case null: //No sensortype -> return all of them
-                    //return await TemperatureClass.TempResponse(id);               
-                    //return await HumidityClass.HumidityResponse(id);                
-                    //return await RainfallClass.RainfallResponse(id);
-                return await HumTempRainClass.HumTempRainResponse(dateParam);
-                //var blobDataTemperature = await FetchDataService.CallBlobAPI(blobURI + "/temperature/" + id + ".csv");
-                //var blobDataHumidity = await FetchDataService.CallBlobAPI(blobURI + "/humidity/" + id + ".csv");
-                //var blobDataRainfall = await FetchDataService.CallBlobAPI(blobURI + "/rainfall/" + id + ".csv");              
-                //return "Humidity \r\n" + blobDataHumidity + "Rainfall \r\n" + blobDataRainfall + "Temperature \r\n" + blobDataTemperature;
+                    return await HumTempRainClass.HumTempRainResponse(dateParam);
                 case "temperature":
                     return await TemperatureClass.TemperatureResponse(dateParam);              
                 case "humidity":

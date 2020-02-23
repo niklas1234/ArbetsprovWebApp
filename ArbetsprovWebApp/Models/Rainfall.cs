@@ -26,11 +26,11 @@ namespace ArbetsprovWebApp.Models
             {
                 if (!string.IsNullOrEmpty(Rainfall))
                 {
-                    var RainfallData = Rainfall.Split(";");
+                    var rainfallLine = Rainfall.Split(";");
                     RainfallObj outgoingJson = new RainfallObj()
                     {
-                        PointInTime = RainfallData[0],
-                        Rainfall = RainfallData[1]
+                        PointInTime = rainfallLine[0],
+                        Rainfall = rainfallLine[1]
                     };
                     outgoingObjAsList.Add(outgoingJson);
                 }

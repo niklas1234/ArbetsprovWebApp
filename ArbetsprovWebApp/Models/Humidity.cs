@@ -26,11 +26,11 @@ namespace ArbetsprovWebApp.Models
             {
                 if (!string.IsNullOrEmpty(humidity))
                 {
-                    var humidityData = humidity.Split(";");
+                    var humidityLine = humidity.Split(";");
                     HumidityObj outgoingJson = new HumidityObj()
                     {
-                        PointInTime = humidityData[0],
-                        Humidity = humidityData[1]
+                        PointInTime = humidityLine[0],
+                        Humidity = humidityLine[1]
                     };
                     outgoingObjAsList.Add(outgoingJson);
                 }
