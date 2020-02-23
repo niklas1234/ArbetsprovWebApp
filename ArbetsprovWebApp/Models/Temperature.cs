@@ -15,12 +15,12 @@ namespace ArbetsprovWebApp.Models
             public string PointInTime { get; set; }
             public string Temperature { get; set; }
         }
-        public static async Task<string> TempResponse(string id)
+        public static async Task<string> TemperatureResponse(string id)
         {
-            var blobDataTemperature1 = await FetchDataService.CallBlobAPI(blobURI + "/temperature/" + id + ".csv");
+            var blobDataTemperature = await FetchDataService.CallBlobAPI(blobURI + "/temperature/" + id + ".csv");
             var outgoingObjAsList = new List<TemperatureObj>();
 
-            var listofTemperatures = blobDataTemperature1.Split("\r\n").ToList();
+            var listofTemperatures = blobDataTemperature.Split("\r\n").ToList();
             foreach (var temperature in listofTemperatures)
             {
                 if (!string.IsNullOrEmpty(temperature))

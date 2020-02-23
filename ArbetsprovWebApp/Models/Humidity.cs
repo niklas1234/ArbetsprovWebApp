@@ -16,12 +16,12 @@ namespace ArbetsprovWebApp.Models
             public string Humidity { get; set; }
         }
 
-        public static async Task<string> HumidityResponse(string id)
+        public static async Task<string> HumidityResponse(string dateParam)
         {
-            var blobDataHumidity1 = await FetchDataService.CallBlobAPI(blobURI + "/humidity/" + id + ".csv");
+            var blobDataHumidity = await FetchDataService.CallBlobAPI(blobURI + "/humidity/" + dateParam + ".csv");
             var outgoingObjAsList = new List<HumidityObj>();
 
-            var listofHumidities = blobDataHumidity1.Split("\r\n").ToList();
+            var listofHumidities = blobDataHumidity.Split("\r\n").ToList();
             foreach (var humidity in listofHumidities)
             {
                 if (!string.IsNullOrEmpty(humidity))
