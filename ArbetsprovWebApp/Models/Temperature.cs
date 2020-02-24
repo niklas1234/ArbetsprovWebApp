@@ -14,9 +14,9 @@ namespace ArbetsprovWebApp.Models
             public string PointInTime { get; set; }
             public string Temperature { get; set; }
         }
-        public static async Task<string> TemperatureResponse(string id)
+        public static async Task<string> TemperatureResponse(string dateParam)
         {
-            var blobDataTemperature = await FetchDataService.CallBlobAPI(blobURI + "/temperature/" + id + ".csv");
+            var blobDataTemperature = await FetchDataService.CallBlobAPI(blobURI + "/temperature/" + dateParam + ".csv");
             var outgoingObjAsList = new List<TemperatureObj>();
 
             var listofTemperatures = blobDataTemperature.Split("\r\n").ToList();

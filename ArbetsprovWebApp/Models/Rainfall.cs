@@ -16,9 +16,9 @@ namespace ArbetsprovWebApp.Models
             public string Rainfall { get; set; }
         }
 
-        public static async Task<string> RainfallResponse(string id)
+        public static async Task<string> RainfallResponse(string dateParam)
         {
-            var blobDataRainfall = await FetchDataService.CallBlobAPI(blobURI + "/rainfall/" + id + ".csv");
+            var blobDataRainfall = await FetchDataService.CallBlobAPI(blobURI + "/rainfall/" + dateParam + ".csv");
             var outgoingObjAsList = new List<RainfallObj>();
 
             var listofRainfalls = blobDataRainfall.Split("\r\n").ToList();
