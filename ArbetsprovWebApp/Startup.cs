@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Net.Mime;
 
 namespace ArbetsprovWebApp
 {
@@ -25,7 +26,31 @@ namespace ArbetsprovWebApp
             services.AddControllers(options =>
                 options.Filters.Add(new HttpResponseExceptionFilter()));
             services.AddMvc(option => option.EnableEndpointRouting = false); //Enpoint routing disabled
+            services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory = context =>
+                    {
+                        var result = new BadRequestObjectResult(context.ModelState);
+                        
+                        result.ContentTypes.Add(MediaTypeNames.Application.Json);
+                        result.ContentTypes.Add(MediaTypeNames.Application.Xml);
+
+                        return result;
+                    };
+                });
+            services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.SuppressConsumesConstraintForFormFileParameters = true;
+                    options.SuppressInferBindingSourcesForParameters = true;
+                    options.SuppressModelStateInvalidFilter = true;
+                    options.SuppressMapClientErrors = true;
+                    options.ClientErrorMapping[404].Link =
+                        "https://httpstatuses.com/404";
+                });
         }
+
         public class HttpResponseException : Exception
         {
             public int Status { get; set; } = 500;
@@ -56,10 +81,11 @@ namespace ArbetsprovWebApp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/error-local-development");
             }
             else
             {
-                app.UseExceptionHandler("/error");
+                app.UseExceptionHandler("/error"); 
                 app.UseHsts(); //Enable HTTP Strict Transport Security
             };
 
