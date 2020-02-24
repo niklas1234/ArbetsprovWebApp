@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace ArbetsprovWebApp
 {
@@ -19,9 +22,34 @@ namespace ArbetsprovWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddControllers(options =>
+                options.Filters.Add(new HttpResponseExceptionFilter()));
             services.AddMvc(option => option.EnableEndpointRouting = false); //Enpoint routing disabled
         }
+        public class HttpResponseException : Exception
+        {
+            public int Status { get; set; } = 500;
 
+            public object Value { get; set; }
+        }
+        public class HttpResponseExceptionFilter : IActionFilter, IOrderedFilter
+        {
+            public int Order { get; set; } = int.MaxValue - 10;
+
+            public void OnActionExecuting(ActionExecutingContext context) { }
+
+            public void OnActionExecuted(ActionExecutedContext context)
+            {
+                if (context.Exception is HttpResponseException exception)
+                {
+                    context.Result = new ObjectResult(exception.Value)
+                    {
+                        StatusCode = exception.Status,
+                    };
+                    context.ExceptionHandled = true;
+                }
+            }
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -29,6 +57,11 @@ namespace ArbetsprovWebApp
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/error");
+                app.UseHsts(); //Enable HTTP Strict Transport Security
+            };
 
             app.UseRouting();
 
