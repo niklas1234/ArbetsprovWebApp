@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-//temp comment
 
 namespace ArbetsprovWebApp
 {
